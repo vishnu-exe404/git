@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Git Lab Commands</title>
+<style>
+:root{--bg:#f3f2ee;--card:#fbfaf7;--ink:#3b3f3c;--mute:#7b807b;--line:#dcdad2;--accent:#6f8576;--accent-soft:#e3e9e3;--code:#eceae3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d201e;--card:#252927;--ink:#d9dcd8;--mute:#8b918c;--line:#363b38;--accent:#8fa596;--accent-soft:#2c3430;--code:#1b1e1c}}
+:root[data-theme="dark"]{--bg:#1d201e;--card:#252927;--ink:#d9dcd8;--mute:#8b918c;--line:#363b38;--accent:#8fa596;--accent-soft:#2c3430;--code:#1b1e1c}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+header{max-width:760px;margin:0 auto;padding:24px 16px 8px}
+h1{font-size:1.4rem;margin:0 0 4px;font-weight:600}
+header p{margin:0;color:var(--mute);font-size:.92rem}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px}
+.tab{flex:none;border:1px solid var(--line);background:transparent;color:var(--mute);padding:6px 14px;border-radius:999px;font:inherit;font-size:.9rem;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+main{max-width:760px;margin:0 auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.top h2{font-size:1.1rem;margin:0;font-weight:600}
+.aim{color:var(--mute);font-size:.92rem;margin:0 0 16px}
+.all{flex:none;border:1px solid var(--accent);background:var(--accent);color:var(--bg);padding:7px 14px;border-radius:8px;font:inherit;font-size:.88rem;cursor:pointer}
+.step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.step h3{font-size:.98rem;margin:0 0 2px;font-weight:600}
+.step p{margin:0 0 10px;color:var(--mute);font-size:.88rem}
+.row{display:flex;align-items:stretch;gap:6px;margin-top:6px}
+.cmd{flex:1;min-width:0;text-align:left;background:var(--code);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:.86rem/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;cursor:pointer;overflow-x:auto;white-space:pre}
+.cp{flex:none;width:42px;border:1px solid var(--line);background:transparent;color:var(--mute);border-radius:8px;cursor:pointer;font-size:.8rem}
+.cmd:active,.cp:active,.all:active{opacity:.7}
+.done{border-color:var(--accent)!important;color:var(--accent)!important}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.88rem;opacity:0;transition:.2s;pointer-events:none;z-index:20}
+#toast.on{opacity:1;transform:translateX(-50%)}
+footer{max-width:760px;margin:0 auto;padding:4px 16px 32px;color:var(--mute);font-size:.82rem}
+.why{color:var(--mute);font-size:.82rem;margin:3px 2px 8px}.step .row:first-of-type{margin-top:0}.sw{display:inline-block;margin-top:8px;color:var(--accent);font-size:.88rem}.mode{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:6px 0 10px}.mode button{border:0;background:transparent;color:var(--mute);padding:6px 14px;font:inherit;font-size:.88rem;cursor:pointer}.mode button[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink)}body.quick .why{display:none}body.quick .row{margin-top:6px}</style>
+</head>
+<body>
+<header>
+<h1>Git Lab Commands</h1>
+<div class="mode" id="mode"><button data-m="quick">Quick</button><button data-m="full">With explanations</button></div><p>Tap any command to copy it. Use the side button too, or “Copy all” for the whole experiment.</p>
+</header>
+<nav><div class="tabs" id="tabs" role="tablist"></div></nav>
+<main id="main"></main>
+<footer>Replace names, emails and the GitHub username with your own before running.</footer>
+<div id="toast">Copied</div>
+<script>
+var URLP="https://github.com/<your-username>/StudentManagement.git";
+var EXP=[
+{n:1,t:"Setup and basic commands",aim:"Create a repository, add a file to staging, and commit it.",steps:[
+{h:"Create folders",d:"Make the project folder and go inside.",c:[["mkdir deptofcsd","Creates the main project folder."],["cd deptofcsd","Moves into that folder."],["mkdir 4AL25CS000","Creates a sub-folder named with your USN."],["cd 4AL25CS000","Moves into the sub-folder."]]},
+{h:"Initialize Git",d:"Turn the folder into a repository.",c:[["git config --global init.defaultBranch master","Makes new repositories start on master instead of main (optional)."],["git init","Creates the hidden .git folder so Git starts tracking this directory."]]},
+{h:"Set your identity",d:"Name and email appear on every commit.",c:[["git config --global user.name \"Your Name\"","Saves your name for all commits."],["git config --global user.email \"you@example.com\"","Saves your email for all commits."],["git config user.name","Shows the saved name."],["git config user.email","Shows the saved email."],["git config --list","Lists every Git setting currently in use."]]},
+{h:"Create a file",d:"Make a file and check it exists.",c:[["echo My name is Your Name > aboutme.txt","Creates aboutme.txt with that text. A single > overwrites the file."],["dir","Lists the files in the folder."],["cat aboutme.txt","Prints the file content."]]},
+{h:"Check status",d:"See what Git notices.",c:[["git status","Shows aboutme.txt as untracked, meaning Git is not tracking it yet."]]},
+{h:"Stage the file",d:"Move changes to the staging area.",c:[["git add aboutme.txt","Stages only this file."],["git add .","Stages every new or changed file in the folder."],["git status","Now shows files under Changes to be committed."],["git ls-files","Lists files Git is tracking."]]},
+{h:"Commit",d:"Save a snapshot.",c:[["git commit -m \"Added aboutme.txt file\"","Records the staged files permanently with your message."],["git status","Should say working tree clean."]]},
+{h:"View history",d:"Review past commits.",c:[["git log","Shows each commit with its ID, author, date and message."]]}]},
+{n:2,t:"Branches and merge",aim:"Create feature-branch, switch to master, and merge it.",steps:[
+{h:"Check branches",d:"The star marks the current branch.",c:[["git branch","Lists all local branches."]]},
+{h:"Create the branch",d:"Make it without switching.",c:[["git branch feature-branch","Creates feature-branch at the current commit."],["git branch","Confirms it exists."]]},
+{h:"Switch to it",d:"Either command works.",c:[["git switch feature-branch","Moves you onto feature-branch (newer command)."],["git checkout feature-branch","Does the same thing (older command)."]]},
+{h:"Change a file",d:"Append a line, stage and commit.",c:[["echo This content is added in feature-branch >> myfirstfile.txt","Adds a line at the end. >> appends instead of overwriting."],["cat myfirstfile.txt","Shows the updated file."],["git add myfirstfile.txt","Stages the change."],["git commit -m \"Updated myfirstfile.txt in feature-branch\"","Saves the change on feature-branch only."]]},
+{h:"Back to master",d:"Return before merging.",c:[["git switch master","Goes back to master, which does not have the change yet."],["git branch","Confirms you are on master."]]},
+{h:"Merge",d:"Bring the branch into master.",c:[["git merge feature-branch","Combines feature-branch into master. Usually a fast-forward."],["cat myfirstfile.txt","The new line is now on master."]]},
+{h:"Delete the branch",d:"Clean up after merging.",c:[["git branch -d feature-branch","Deletes the branch. Safe because it is already merged."],["git branch","Only master remains."]]}]},
+{n:3,t:"Stash and apply",aim:"Stash changes, switch branches, then apply them.",steps:[
+{h:"Make a change",d:"An edit you have not committed.",c:[["git branch","Shows which branch you are on."],["echo This line is added before stash >> secondfile.txt","Makes an uncommitted change."],["cat secondfile.txt","Shows the file with the new line."],["git status","Shows the file as modified."]]},
+{h:"Stash it",d:"Shelve the work temporarily.",c:[["git stash -u","Saves changes (including untracked files) and cleans the working folder."],["git stash list","Shows saved stashes such as stash@{0}."]]},
+{h:"New branch",d:"Create it and switch.",c:[["git branch feature-branch","Creates the branch."],["git switch feature-branch","Moves onto it."]]},
+{h:"Apply the stash",d:"Bring the saved changes back.",c:[["git stash apply","Re-applies the latest stash here and keeps it in the list."],["cat secondfile.txt","The line is back."],["git status","Shows the file as modified."]]},
+{h:"Remove the stash",d:"Clean up once applied.",c:[["git stash drop","Deletes the latest stash. Use git stash pop to apply and drop together."]]}]},
+{n:4,t:"Clone a repository",aim:"Copy a remote GitHub repository to your machine.",steps:[
+{h:"Pick a folder",d:"Where the project will live.",c:[["mkdir GitProjects","Creates a folder for your clones."],["cd GitProjects","Moves into it."]]},
+{h:"Clone",d:"Download the repo with history.",c:[["git clone https://github.com/octocat/Hello-World.git","Copies the remote repository, with all history, into a new Hello-World folder."]]},
+{h:"Go inside and verify",d:"Check status, remote and files.",c:[["cd Hello-World","Enters the cloned project."],["git status","Shows the branch and that the tree is clean."],["git remote -v","Shows the origin URL used for fetch and push."],["ls","Lists the project files."]]}]},
+{n:5,t:"Fetch and rebase",aim:"Two developers share a repo; Developer B fetches and rebases before pushing.",steps:[
+{h:"Set up two developers",d:"Two folders act as two computers.",c:[["mkdir DevA DevB","Creates one folder per developer."]]},
+{h:"Developer A: clone",d:"Uses your StudentManagement repo.",c:[["cd DevA","Enters Developer A's folder."],["git clone "+URLP,"Downloads the repo. Replace the URL with yours."],["cd StudentManagement","Enters the cloned repo."]]},
+{h:"Developer A: add and push",d:"Create Addition.py and push it.",c:[["echo a=10 > Addition.py","Creates the file with its first line."],["echo b=20 >> Addition.py","Appends the second line."],["echo \"print(a+b)\" >> Addition.py","Appends the third line."],["git add Addition.py","Stages the file."],["git commit -m \"Added Addition program\"","Saves it locally."],["git push origin main","Uploads the commit to GitHub."]]},
+{h:"Developer B: clone",d:"Starts without A's latest commit.",c:[["cd ~/DevB","Goes to Developer B's folder."],["git clone "+URLP,"Downloads the repo."],["cd StudentManagement","Enters it."]]},
+{h:"Developer B: add and commit",d:"Create Subtraction.py locally.",c:[["echo a=20 > Subtraction.py","Creates the file."],["echo b=10 >> Subtraction.py","Appends line two."],["echo \"print(a-b)\" >> Subtraction.py","Appends line three."],["git add Subtraction.py","Stages it."],["git commit -m \"Added Subtraction program\"","Saves it locally."]]},
+{h:"Developer B: push is rejected",d:"The remote has work B lacks.",c:[["git push origin main","Fails because GitHub already has Developer A's commit."]]},
+{h:"Fetch and rebase",d:"Update, then replay B's commit.",c:[["git fetch origin","Downloads A's commit without changing your files."],["git rebase origin/main","Puts your commit after A's, giving a straight history."]]},
+{h:"Push again",d:"Now it succeeds.",c:[["git push origin main","Uploads the rebased commit."],["git log --oneline","Shows the clean linear history."]]}]}
+];
+var tabs=document.getElementById("tabs"),main=document.getElementById("main"),toast=document.getElementById("toast"),tt;
+function say(m){toast.textContent=m;toast.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove("on")},1400)}
+function copy(text,el){
+  function ok(){say("Copied");if(el){el.classList.add("done");setTimeout(function(){el.classList.remove("done")},900)}}
+  function fb(){var a=document.createElement("textarea");a.value=text;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();try{document.execCommand("copy");ok()}catch(e){say("Copy failed")}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok,fb)}else fb()
+}
+function mk(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+function show(i){
+  var ex=EXP[i];
+  Array.prototype.forEach.call(tabs.children,function(b,j){b.setAttribute("aria-selected",j===i)});
+  main.textContent="";
+  var top=mk("div","top"),h=mk("h2","","Experiment "+ex.n+": "+ex.t),all=mk("button","all","Copy all");
+  all.onclick=function(){var l=[];ex.steps.forEach(function(s){s.c.forEach(function(p){l.push(p[0])})});copy(l.join("\n"),all)};
+  top.appendChild(h);top.appendChild(all);main.appendChild(top);
+  main.appendChild(mk("p","aim",ex.aim));
+  ex.steps.forEach(function(s){
+    var box=mk("div","step");box.appendChild(mk("h3","",s.h));box.appendChild(mk("p","",s.d));
+    s.c.forEach(function(p){
+      var r=mk("div","row"),b=mk("button","cmd",p[0]),k=mk("button","cp","Copy");
+      b.onclick=function(){copy(p[0],b)};k.onclick=function(){copy(p[0],k)};
+      r.appendChild(b);r.appendChild(k);box.appendChild(r);box.appendChild(mk("div","why",p[1]))
+    });
+    main.appendChild(box)
+  });
+  window.scrollTo(0,0)
+}
+EXP.forEach(function(ex,i){var b=mk("button","tab","Exp "+ex.n);b.setAttribute("role","tab");b.onclick=function(){show(i)};tabs.appendChild(b)});
+show(0);
+
+function setMode(m){document.body.classList.toggle("quick",m==="quick");Array.prototype.forEach.call(document.querySelectorAll("#mode button"),function(b){b.setAttribute("aria-pressed",b.dataset.m===m)});try{localStorage.setItem("gitlabmode",m)}catch(e){}}
+Array.prototype.forEach.call(document.querySelectorAll("#mode button"),function(b){b.onclick=function(){setMode(b.dataset.m)}});
+var sm="full";try{sm=localStorage.getItem("gitlabmode")||"full"}catch(e){}
+setMode(sm);
+</script>
+</body>
+</html>
